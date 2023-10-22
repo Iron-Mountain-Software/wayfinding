@@ -2,20 +2,38 @@
   "name": "com.iron-mountain.wayfinding",
   "version": "1.0.0",
   "displayName": "Wayfinding",
-  "description": "AI pathfinding with referencable waypoints",
-  "unity": "2019.1",
-  "keywords": [
-    "ai"
-  ],
   "author": "Chris Monteferrante <ludachrismonte@gmail.com>",
+  "unity": "2019.1",
   "type": "tool",
+  "license": "MIT",
+  "homepage": "https://github.com/SpellBoundAR-Packages/wayfinding#readme",
+  "bugs": {
+    "type": "git",
+    "url": "https://github.com/SpellBoundAR-Packages/wayfinding/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Iron-Mountain-Software/wayfinding.git"
   },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/SpellBoundAR-Packages/wayfinding/issues"
-  },
-  "homepage": "https://github.com/SpellBoundAR-Packages/wayfinding#readme"
+  "description": "AI pathfinding with referencable waypoints",
+  "useCases": [],
+  "directions": null,
+  "keywords": [
+    "ai"
+  ],
+  "sources": [
+    {
+      "type": "git",
+      "url": "https://github.com/Iron-Mountain-Software/wayfinding"
+    },
+    {
+      "type": "npm",
+      "url": "https://www.npmjs.com/package/com.iron-mountain.wayfinding"
+    },
+    {
+      "type": "itch.io",
+      "url": "https://iron-mountain.itch.io/wayfinding"
+    }
+  ],
+  "dependencies": {}
 }

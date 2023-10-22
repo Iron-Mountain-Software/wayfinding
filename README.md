@@ -2,6 +2,8 @@
 Version: 1.0.0
 AI pathfinding with referencable waypoints
 
+## Package Mirrors:
+[<img src='https://img.itch.zone/aW1nLzEzNzQ2ODg3LnBuZw==/original/npRUfq.png'>](https://github.com/Iron-Mountain-Software/wayfinding)[<img src='https://img.itch.zone/aW1nLzEzNzQ2ODkyLnBuZw==/original/Fq0ORM.png'>](https://www.npmjs.com/package/com.iron-mountain.wayfinding)[<img src='https://img.itch.zone/aW1nLzEzNzQ2ODk4LnBuZw==/original/Rv4m96.png'>](https://iron-mountain.itch.io/wayfinding)
 ## Key Scripts & Components:
 1. public class **Waypoint** : MonoBehaviour
    * Properties: 
