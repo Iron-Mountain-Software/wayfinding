@@ -1,6 +1,6 @@
 {
   "name": "com.iron-mountain.wayfinding",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Wayfinding",
   "author": "Chris Monteferrante <ludachrismonte@gmail.com>",
   "unity": "2019.1",
@@ -34,6 +34,5 @@
       "type": "itch.io",
       "url": "https://iron-mountain.itch.io/wayfinding"
     }
-  ],
-  "dependencies": {}
+  ]
 }
