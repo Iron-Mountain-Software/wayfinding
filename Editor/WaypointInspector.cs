@@ -1,8 +1,7 @@
-using IronMountain.Wayfinding;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor
+namespace IronMountain.Wayfinding.Editor
 {
     [CustomEditor(typeof(Waypoint), true)]
     public class WaypointInspector : UnityEditor.Editor

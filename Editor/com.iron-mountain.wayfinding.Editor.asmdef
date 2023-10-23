@@ -1,6 +1,6 @@
 {
     "name": "com.iron-mountain.wayfinding.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "IronMountain.Wayfinding",
     "references": [
         "GUID:21863dc22f3fc4821b67c1d8d9b6e889"
     ],
