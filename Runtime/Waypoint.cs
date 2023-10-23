@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,7 +12,12 @@ namespace IronMountain.Wayfinding
         [SerializeField] private WaypointReference reference;
         [SerializeField] private List<Waypoint> neighbors = new ();
 
-        public WaypointReference Reference => reference;
+        public WaypointReference Reference
+        {
+            get => reference;
+            set => reference = value;
+        }
+
         public List<Waypoint> Neighbors => neighbors;
 
         private void OnEnable() => WaypointManager.Waypoints.Add(this);
@@ -28,7 +34,6 @@ namespace IronMountain.Wayfinding
         }
 
 #if UNITY_EDITOR
-        
 
         private void OnValidate()
         {
@@ -66,7 +71,7 @@ namespace IronMountain.Wayfinding
         {
             if (WaypointManager.Waypoints.Count > 0 && WaypointManager.Waypoints[0] == this) WaypointManager.DrawGizmos();
         }
-        
+
 #endif
         
     }

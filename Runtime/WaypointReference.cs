@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace IronMountain.Wayfinding
@@ -14,7 +15,17 @@ namespace IronMountain.Wayfinding
         }
 
         public virtual string Name => name;
-    
+
+        private void OnEnable()
+        {
+            WaypointManager.WaypointReferences.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            WaypointManager.WaypointReferences.Remove(this);
+        }
+
 #if UNITY_EDITOR
 
         public virtual void Reset()

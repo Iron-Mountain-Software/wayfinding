@@ -8,6 +8,11 @@ namespace IronMountain.Wayfinding
     public static class WaypointManager
     {
         public static readonly List<Waypoint> Waypoints = new ();
+        public static readonly List<WaypointReference> WaypointReferences = new ();
+
+        public static bool ShouldDrawLines = true;
+        public static bool ShouldDrawDiscs = true;
+        public static bool ShouldDrawLabels = false;
 
         public static Waypoint GetWaypoint(string id)
         {
@@ -98,6 +103,13 @@ namespace IronMountain.Wayfinding
         
         public static void DrawGizmos()
         {
+            if (ShouldDrawLines) DrawLines();
+            if (ShouldDrawDiscs) DrawDiscs();
+            if (ShouldDrawLabels) DrawLabels();
+        }
+
+        private static void DrawLines()
+        {
             foreach (var waypoint in Waypoints)
             {
                 if (!waypoint) continue;
@@ -110,17 +122,23 @@ namespace IronMountain.Wayfinding
                         || p1.x == p2.x && p1.y < p2.y
                         || p1.x == p2.x && p1.y == p2.y && p1.z < p2.z) continue;
                     Handles.color = Color.white;
-                    Handles.DrawLine(p1, p2, 2);
+                    Handles.DrawLine(p1, p2, 1);
                 }
             }
+        }
 
+        private static void DrawDiscs()
+        {
             foreach (var waypoint in Waypoints)
             {
                 if (!waypoint) continue;
                 Handles.color = Color.white;
                 Handles.DrawSolidDisc(waypoint.transform.position, Vector3.up, .1f);
             }
-            
+        }
+
+        private static void DrawLabels()
+        {
             GUIStyle.alignment = TextAnchor.UpperCenter;
             GUIStyle.normal = GUIStyleState;
             GUIStyle.normal.background = Texture2D.whiteTexture;
