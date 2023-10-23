@@ -93,7 +93,6 @@ namespace IronMountain.Wayfinding
 
         private void OnDisable() => Moving = false;
 
-        [ContextMenu("Snap To Current")]
         private void SnapToCurrent()
         {
             Transform currentWaypointTransform = currentWaypoint ? currentWaypoint.transform : null;
@@ -103,7 +102,6 @@ namespace IronMountain.Wayfinding
             myTransform.rotation = currentWaypointTransform.rotation;
         }
 
-        [ContextMenu("Refresh Path")]
         private void RefreshPath()
         {
             _path.Clear();
