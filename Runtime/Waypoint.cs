@@ -5,6 +5,7 @@ using UnityEngine;
 namespace IronMountain.Wayfinding
 {
     [ExecuteAlways]
+    [DisallowMultipleComponent]
     public class Waypoint : MonoBehaviour
     {
         [SerializeField] private WaypointReference reference;
