@@ -16,6 +16,9 @@ namespace IronMountain.Wayfinding
         [SerializeField] private float speed = 5f;
         [SerializeField] private float multiplier = 1f;
         [SerializeField] private Vector3 offset;
+        [Space]
+        [SerializeField] private bool rotate = true;
+        [SerializeField] private float rotationMultiplier = 3f;
 
         [Header("Cache")]
         private bool _moving;
@@ -31,6 +34,12 @@ namespace IronMountain.Wayfinding
         {
             get => multiplier;
             set => multiplier = value;
+        }
+        
+        public bool Rotate
+        {
+            get => rotate;
+            set => rotate = value;
         }
 
         public bool Moving
@@ -77,7 +86,7 @@ namespace IronMountain.Wayfinding
             RefreshPath();
         }
         
-        public Vector3 GetLookDirection()
+        public Vector3 GetDirection()
         {
             if (_path.Count > 0)
             {
@@ -99,7 +108,6 @@ namespace IronMountain.Wayfinding
             if (!currentWaypointTransform) return;
             Transform myTransform = transform;
             myTransform.position = currentWaypointTransform.position + offset;
-            myTransform.rotation = currentWaypointTransform.rotation;
         }
 
         private void RefreshPath()
@@ -136,6 +144,15 @@ namespace IronMountain.Wayfinding
             {
                 RefreshPath();
             }
+            
+            Vector3 direction = GetDirection();
+
+            if (rotate)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationMultiplier);
+                Debug.DrawRay(transform.position, direction * 5);
+            }
 
             if (_path is {Count: 0})
             {
@@ -152,7 +169,6 @@ namespace IronMountain.Wayfinding
             
             Vector3 currentPosition = transform.position;
             Vector3 targetPosition = _path[0].transform.position + offset;
-            Vector3 direction = GetLookDirection();
             float remainingDistance = Vector3.Distance(currentPosition, targetPosition);
             float frameDistance = multiplier * speed * Time.deltaTime;
             if (frameDistance < remainingDistance)
