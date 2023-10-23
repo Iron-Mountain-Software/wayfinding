@@ -29,6 +29,41 @@ namespace IronMountain.Wayfinding
                 : null;
         }
 
+        public static Waypoint GetClosestWaypointTo(Vector3 position)
+        {
+            Waypoint closestWaypoint = null;
+            float closestDistance = Mathf.Infinity;
+            foreach (Waypoint waypoint in Waypoints)
+            {
+                if (!waypoint) continue;
+                float testDistance = Vector3.Distance(waypoint.transform.position, position);
+                if (testDistance < closestDistance)
+                {
+                    closestWaypoint = waypoint;
+                    closestDistance = testDistance;
+                }
+            }
+            return closestWaypoint;
+        }
+        
+        public static Waypoint GetClosestWaypointTo(Vector3 position, float distance)
+        {
+            Waypoint bestWaypoint = null;
+            float bestDelta = Mathf.Infinity;
+            foreach (Waypoint waypoint in Waypoints)
+            {
+                if (!waypoint) continue;
+                float testDistance = Vector3.Distance(waypoint.transform.position, position);
+                float testDelta = Mathf.Abs(testDistance - distance);
+                if (testDelta < bestDelta)
+                {
+                    bestWaypoint = waypoint;
+                    bestDelta = testDelta;
+                }
+            }
+            return bestWaypoint;
+        }
+
         public static List<Waypoint> GetShortestPath(Waypoint start, Waypoint end)
         {
             List<Waypoint> path = new List<Waypoint>();
@@ -101,6 +136,8 @@ namespace IronMountain.Wayfinding
             textColor = Color.black
         };
         
+#if UNITY_EDITOR
+
         public static void DrawGizmos()
         {
             if (ShouldDrawLines) DrawLines();
@@ -152,5 +189,8 @@ namespace IronMountain.Wayfinding
                     GUIStyle);
             }
         }
+
+#endif
+        
     }
 }
