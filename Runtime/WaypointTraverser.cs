@@ -88,13 +88,10 @@ namespace IronMountain.Wayfinding
         
         public Vector3 GetDirection()
         {
-            if (_path.Count > 0)
-            {
-                Vector3 targetPosition = _path[0].transform.position + offset;
-                return (targetPosition - transform.position).normalized;
-            }
-            return CurrentWaypoint 
-                ? CurrentWaypoint.transform.forward 
+            return currentWaypoint
+                ? Moving 
+                    ? (currentWaypoint.transform.position - transform.position).normalized
+                    : currentWaypoint.transform.forward 
                 : transform.forward;
         }
         

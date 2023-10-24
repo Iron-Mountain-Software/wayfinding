@@ -46,7 +46,7 @@ namespace IronMountain.Wayfinding
             return closestWaypoint;
         }
         
-        public static Waypoint GetClosestWaypointTo(Vector3 position, float distance)
+        public static Waypoint GetClosestWaypointTo(Vector3 position, float idealDistance)
         {
             Waypoint bestWaypoint = null;
             float bestDelta = Mathf.Infinity;
@@ -54,7 +54,7 @@ namespace IronMountain.Wayfinding
             {
                 if (!waypoint) continue;
                 float testDistance = Vector3.Distance(waypoint.transform.position, position);
-                float testDelta = Mathf.Abs(testDistance - distance);
+                float testDelta = Mathf.Abs(testDistance - idealDistance);
                 if (testDelta < bestDelta)
                 {
                     bestWaypoint = waypoint;
