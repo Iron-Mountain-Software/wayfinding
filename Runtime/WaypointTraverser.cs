@@ -127,9 +127,8 @@ namespace IronMountain.Wayfinding
             {
                 _path.RemoveAt(0);
             }
-            currentWaypoint = _path is {Count: > 0} 
-                ? _path[0] 
-                : null;
+            if (_path is {Count: > 0}) currentWaypoint = _path[0];
+            if (!currentWaypoint) currentWaypoint = WaypointManager.GetClosestWaypointTo(transform.position);
         }
 
         private void Update()
@@ -143,6 +142,8 @@ namespace IronMountain.Wayfinding
 
             RefreshCurrentWaypoint();
             
+            if (!currentWaypoint) return;
+            
             Vector3 direction = GetDirection();
 
             if (rotate)
@@ -151,22 +152,20 @@ namespace IronMountain.Wayfinding
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationMultiplier);
             }
             
-            Moving = currentWaypoint;
-            
-            if (!Moving) return;
-            
             Vector3 targetPosition = currentWaypoint.transform.position + offset;
             float remainingDistance = Vector3.Distance(transform.position, targetPosition);
             float frameDistance = multiplier * speed * Time.deltaTime;
             if (frameDistance < remainingDistance)
             {
                 transform.Translate(direction * frameDistance, Space.World);
+                Moving = true;
             }
             else
             {
-                transform.Translate(direction * remainingDistance, Space.World);
                 transform.position = currentWaypoint.transform.position;
                 if (_path.Count > 0) _path.RemoveAt(0);
+                Moving = _path.Count > 0;
+                if (!Moving) destinationWaypoint = null;
             }
         }
 
