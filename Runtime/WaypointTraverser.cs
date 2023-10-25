@@ -166,6 +166,8 @@ namespace IronMountain.Wayfinding
             }
         }
 
+#if UNITY_EDITOR
+        
         private void OnDrawGizmos()
         {
             Handles.color = Color.red;
@@ -180,5 +182,8 @@ namespace IronMountain.Wayfinding
                 Handles.DrawLine(a.transform.position, b.transform.position, 2);
             }
         }
+        
+#endif
+
     }
 }
