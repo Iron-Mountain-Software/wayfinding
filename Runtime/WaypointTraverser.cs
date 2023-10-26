@@ -60,9 +60,7 @@ namespace IronMountain.Wayfinding
             {
                 if (!value || currentWaypoint == value) return;
                 currentWaypoint = value;
-                SnapToCurrent();
                 OnCurrentWaypointChanged?.Invoke();
-                RefreshPath();
             }
         }
 
@@ -77,21 +75,20 @@ namespace IronMountain.Wayfinding
             }
         }
 
-        public void Initialize(Waypoint startWaypoint, Waypoint destinationWaypoint = null)
+        public void Initialize(Waypoint start, Waypoint destination = null)
         {
-            currentWaypoint = startWaypoint;
+            CurrentWaypoint = start;
             SnapToCurrent();
-            OnCurrentWaypointChanged?.Invoke();
-            this.destinationWaypoint = destinationWaypoint;
+            destinationWaypoint = destination;
             RefreshPath();
         }
         
         public Vector3 GetDirection()
         {
-            return currentWaypoint
+            return CurrentWaypoint
                 ? Moving 
-                    ? (currentWaypoint.transform.position + offset - transform.position).normalized
-                    : currentWaypoint.transform.forward 
+                    ? (CurrentWaypoint.transform.position + offset - transform.position).normalized
+                    : CurrentWaypoint.transform.forward 
                 : transform.forward;
         }
         
@@ -101,7 +98,7 @@ namespace IronMountain.Wayfinding
 
         private void SnapToCurrent()
         {
-            Transform currentWaypointTransform = currentWaypoint ? currentWaypoint.transform : null;
+            Transform currentWaypointTransform = CurrentWaypoint ? CurrentWaypoint.transform : null;
             if (!currentWaypointTransform) return;
             Transform myTransform = transform;
             myTransform.position = currentWaypointTransform.position + offset;
@@ -110,10 +107,10 @@ namespace IronMountain.Wayfinding
         private void RefreshPath()
         {
             _path.Clear();
-            currentWaypoint = WaypointManager.GetClosestWaypointTo(transform.position);
-            if (currentWaypoint && destinationWaypoint)
+            CurrentWaypoint = WaypointManager.GetClosestWaypointTo(transform.position);
+            if (CurrentWaypoint && destinationWaypoint)
             {
-                _path.AddRange(WaypointManager.GetShortestPath(currentWaypoint, destinationWaypoint));
+                _path.AddRange(WaypointManager.GetShortestPath(CurrentWaypoint, destinationWaypoint));
                 if (_path.Count > 1) _path.RemoveAt(0);
             }
         }
@@ -124,8 +121,8 @@ namespace IronMountain.Wayfinding
             {
                 _path.RemoveAt(0);
             }
-            if (_path is {Count: > 0}) currentWaypoint = _path[0];
-            if (!currentWaypoint) currentWaypoint = WaypointManager.GetClosestWaypointTo(transform.position);
+            if (_path is {Count: > 0}) CurrentWaypoint = _path[0];
+            if (!CurrentWaypoint) CurrentWaypoint = WaypointManager.GetClosestWaypointTo(transform.position);
         }
 
         private void Update()
@@ -139,7 +136,7 @@ namespace IronMountain.Wayfinding
 
             RefreshCurrentWaypoint();
             
-            if (!currentWaypoint) return;
+            if (!CurrentWaypoint) return;
             
             Vector3 direction = GetDirection();
 
@@ -149,7 +146,7 @@ namespace IronMountain.Wayfinding
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationMultiplier);
             }
             
-            Vector3 targetPosition = currentWaypoint.transform.position + offset;
+            Vector3 targetPosition = CurrentWaypoint.transform.position + offset;
             float remainingDistance = Vector3.Distance(transform.position, targetPosition);
             float frameDistance = multiplier * speed * Time.deltaTime;
             if (frameDistance < remainingDistance)
@@ -159,7 +156,7 @@ namespace IronMountain.Wayfinding
             }
             else
             {
-                transform.position = currentWaypoint.transform.position + offset;
+                transform.position = CurrentWaypoint.transform.position + offset;
                 if (_path.Count > 0) _path.RemoveAt(0);
                 Moving = _path.Count > 0;
                 if (!Moving) destinationWaypoint = null;
