@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace IronMountain.Wayfinding
 {
-    [CreateAssetMenu(menuName = "Scriptable Objects/Gameplay/AI/Wayfinding Node")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/Gameplay/AI/Waypoint Reference")]
     public class WaypointReference : ScriptableObject
     {
         [SerializeField] private string id;

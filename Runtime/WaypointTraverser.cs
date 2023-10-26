@@ -90,7 +90,7 @@ namespace IronMountain.Wayfinding
         {
             return currentWaypoint
                 ? Moving 
-                    ? (currentWaypoint.transform.position - transform.position).normalized
+                    ? (currentWaypoint.transform.position + offset - transform.position).normalized
                     : currentWaypoint.transform.forward 
                 : transform.forward;
         }
@@ -131,7 +131,7 @@ namespace IronMountain.Wayfinding
         private void Update()
         {
             if (destinationWaypoint
-                && transform.position != destinationWaypoint.transform.position
+                && transform.position != destinationWaypoint.transform.position + offset
                 && (_path is null or {Count: 0} || _path[^1] != destinationWaypoint))
             {
                 RefreshPath();
@@ -159,7 +159,7 @@ namespace IronMountain.Wayfinding
             }
             else
             {
-                transform.position = currentWaypoint.transform.position;
+                transform.position = currentWaypoint.transform.position + offset;
                 if (_path.Count > 0) _path.RemoveAt(0);
                 Moving = _path.Count > 0;
                 if (!Moving) destinationWaypoint = null;
@@ -173,13 +173,13 @@ namespace IronMountain.Wayfinding
             Handles.color = Color.red;
             if (_path.Count > 0)
             {
-                Handles.DrawLine(transform.position, _path[0].transform.position, 2);
+                Handles.DrawLine(transform.position, _path[0].transform.position + offset, 2);
             }
             for (int i = 0; i <= _path.Count - 2; i++)
             {
                 Waypoint a = _path[i];
                 Waypoint b = _path[i + 1];
-                Handles.DrawLine(a.transform.position, b.transform.position, 2);
+                Handles.DrawLine(a.transform.position + offset, b.transform.position + offset, 2);
             }
         }
         
