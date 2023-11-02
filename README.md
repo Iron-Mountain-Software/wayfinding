@@ -1,13 +1,14 @@
 # Wayfinding
-Version: 1.0.1
+*Version: 1.1.3*
+## Description: 
 AI pathfinding with referencable waypoints
-
-## Package Mirrors:
+## Package Mirrors: 
 [<img src='https://img.itch.zone/aW1nLzEzNzQ2ODg3LnBuZw==/original/npRUfq.png'>](https://github.com/Iron-Mountain-Software/wayfinding)[<img src='https://img.itch.zone/aW1nLzEzNzQ2ODkyLnBuZw==/original/Fq0ORM.png'>](https://www.npmjs.com/package/com.iron-mountain.wayfinding)[<img src='https://img.itch.zone/aW1nLzEzNzQ2ODk4LnBuZw==/original/Rv4m96.png'>](https://iron-mountain.itch.io/wayfinding)
-## Key Scripts & Components:
+---
+## Key Scripts & Components: 
 1. public class **Waypoint** : MonoBehaviour
    * Properties: 
-      * public WaypointReference ***Reference***  { get; }
+      * public WaypointReference ***Reference***  { get; set; }
       * public List<Waypoint> ***Neighbors***  { get; }
    * Methods: 
       * public void ***AddNeighbor***(Waypoint neighbor)
@@ -26,12 +27,20 @@ AI pathfinding with referencable waypoints
    * Properties: 
       * public float ***Speed***  { get; set; }
       * public float ***Multiplier***  { get; set; }
+      * public Vector3 ***Offset***  { get; set; }
+      * public Boolean ***Rotate***  { get; set; }
+      * public float ***RotationMultiplier***  { get; set; }
       * public Boolean ***Moving***  { get; }
       * public Waypoint ***CurrentWaypoint***  { get; set; }
       * public Waypoint ***DestinationWaypoint***  { get; set; }
    * Methods: 
-      * public void ***Initialize***(Waypoint startWaypoint, Waypoint destinationWaypoint)
-      * public Vector3 ***GetLookDirection***()
+      * public void ***Initialize***(Waypoint start, Waypoint destination)
+      * public Vector3 ***GetDirection***()
+1. public class **WaypointTraverserAnimator** : MonoBehaviour
+   * Properties: 
+      * public Boolean ***AnimatorBoolValue***  { get; }
+   * Methods: 
+      * public void ***SetBool***(Boolean value)
 ### Data Structures
 1. public class **FastPriorityQueueNode**
    * Properties: 

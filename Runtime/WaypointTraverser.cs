@@ -36,10 +36,22 @@ namespace IronMountain.Wayfinding
             set => multiplier = value;
         }
         
+        public Vector3 Offset
+        {
+            get => offset;
+            set => offset = value;
+        }
+        
         public bool Rotate
         {
             get => rotate;
             set => rotate = value;
+        }
+        
+        public float RotationMultiplier
+        {
+            get => rotationMultiplier;
+            set => rotationMultiplier = value;
         }
 
         public bool Moving
