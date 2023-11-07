@@ -7,6 +7,13 @@ namespace IronMountain.Wayfinding
 {
     public class WaypointTraverser : MonoBehaviour
     {
+        public enum RotationType
+        {
+            None,
+            Align,
+            AlignClamped
+        }
+
         public event Action OnMovingChanged;
         public event Action OnCurrentWaypointChanged;
 
@@ -17,7 +24,8 @@ namespace IronMountain.Wayfinding
         [SerializeField] private float multiplier = 1f;
         [SerializeField] private Vector3 offset;
         [Space]
-        [SerializeField] private bool rotate = true;
+        [SerializeField] private RotationType rotationType = RotationType.Align;
+        [SerializeField] private Vector3 clampNormal = Vector3.up;
         [SerializeField] private float rotationMultiplier = 3f;
 
         [Header("Cache")]
@@ -42,10 +50,10 @@ namespace IronMountain.Wayfinding
             set => offset = value;
         }
         
-        public bool Rotate
+        public RotationType Rotate
         {
-            get => rotate;
-            set => rotate = value;
+            get => rotationType;
+            set => rotationType = value;
         }
         
         public float RotationMultiplier
@@ -64,7 +72,7 @@ namespace IronMountain.Wayfinding
                 OnMovingChanged?.Invoke();
             }
         }
-
+        
         public Waypoint CurrentWaypoint
         {
             get => currentWaypoint;
@@ -136,7 +144,7 @@ namespace IronMountain.Wayfinding
             if (_path is {Count: > 0}) CurrentWaypoint = _path[0];
             if (!CurrentWaypoint) CurrentWaypoint = WaypointManager.GetClosestWaypointTo(transform.position);
         }
-
+        
         private void Update()
         {
             if (destinationWaypoint
@@ -150,25 +158,35 @@ namespace IronMountain.Wayfinding
             
             if (!CurrentWaypoint) return;
             
-            Vector3 direction = GetDirection();
-
-            if (rotate)
+            Vector3 moveDirection = GetDirection();
+            Vector3 lookDirection = Vector3.zero;
+            
+            switch (rotationType)
             {
-                Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
+                case RotationType.Align:
+                    lookDirection = moveDirection;
+                    break;
+                case RotationType.AlignClamped:
+                    lookDirection = Vector3.ProjectOnPlane(moveDirection, clampNormal).normalized;
+                    break;
+            }
+
+            if (lookDirection != Vector3.zero)
+            {                
+                Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationMultiplier);
             }
-            
+
             Vector3 targetPosition = CurrentWaypoint.transform.position + offset;
-            float remainingDistance = Vector3.Distance(transform.position, targetPosition);
             float frameDistance = multiplier * speed * Time.deltaTime;
-            if (frameDistance < remainingDistance)
+            if (frameDistance < Vector3.Distance(transform.position, targetPosition))
             {
-                transform.Translate(direction * frameDistance, Space.World);
+                transform.Translate(moveDirection * frameDistance, Space.World);
                 Moving = true;
             }
             else
             {
-                transform.position = CurrentWaypoint.transform.position + offset;
+                transform.position = targetPosition;
                 if (_path.Count > 0) _path.RemoveAt(0);
                 Moving = _path.Count > 0;
                 if (!Moving) destinationWaypoint = null;
