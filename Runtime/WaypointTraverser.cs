@@ -54,10 +54,22 @@ namespace IronMountain.Wayfinding
             set => offset = value;
         }
         
-        public RotationType Rotate
+        public RotationType RotateWhenMoving
+        {
+            get => rotateWhenMoving;
+            set => rotateWhenMoving = value;
+        }
+        
+        public RotationType RotateWhenStationary
         {
             get => rotateWhenStationary;
             set => rotateWhenStationary = value;
+        }
+
+        public Transform LookAtTransform
+        {
+            get => lookAtTransform;
+            set => lookAtTransform = value;
         }
         
         public float RotationMultiplier
