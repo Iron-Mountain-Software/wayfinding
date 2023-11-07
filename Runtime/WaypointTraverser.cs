@@ -11,7 +11,9 @@ namespace IronMountain.Wayfinding
         {
             None,
             Align,
-            AlignClamped
+            AlignClamped,
+            LookAt,
+            LookAtClamped
         }
 
         public event Action OnMovingChanged;
@@ -24,7 +26,9 @@ namespace IronMountain.Wayfinding
         [SerializeField] private float multiplier = 1f;
         [SerializeField] private Vector3 offset;
         [Space]
-        [SerializeField] private RotationType rotationType = RotationType.Align;
+        [SerializeField] private RotationType rotateWhenMoving = RotationType.Align;
+        [SerializeField] private RotationType rotateWhenStationary = RotationType.Align;
+        [SerializeField] private Transform lookAtTransform;
         [SerializeField] private Vector3 clampNormal = Vector3.up;
         [SerializeField] private float rotationMultiplier = 3f;
 
@@ -52,8 +56,8 @@ namespace IronMountain.Wayfinding
         
         public RotationType Rotate
         {
-            get => rotationType;
-            set => rotationType = value;
+            get => rotateWhenStationary;
+            set => rotateWhenStationary = value;
         }
         
         public float RotationMultiplier
@@ -153,30 +157,15 @@ namespace IronMountain.Wayfinding
             {
                 RefreshPath();
             }
-
             RefreshCurrentWaypoint();
-            
             if (!CurrentWaypoint) return;
-            
             Vector3 moveDirection = GetDirection();
-            Vector3 lookDirection = Vector3.zero;
-            
-            switch (rotationType)
-            {
-                case RotationType.Align:
-                    lookDirection = moveDirection;
-                    break;
-                case RotationType.AlignClamped:
-                    lookDirection = Vector3.ProjectOnPlane(moveDirection, clampNormal).normalized;
-                    break;
-            }
+            HandleMovement(moveDirection);
+            HandleRotation(moveDirection);
+        }
 
-            if (lookDirection != Vector3.zero)
-            {                
-                Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationMultiplier);
-            }
-
+        private void HandleMovement(Vector3 moveDirection)
+        {
             Vector3 targetPosition = CurrentWaypoint.transform.position + offset;
             float frameDistance = multiplier * speed * Time.deltaTime;
             if (frameDistance < Vector3.Distance(transform.position, targetPosition))
@@ -190,6 +179,38 @@ namespace IronMountain.Wayfinding
                 if (_path.Count > 0) _path.RemoveAt(0);
                 Moving = _path.Count > 0;
                 if (!Moving) destinationWaypoint = null;
+            }
+        }
+
+        private void HandleRotation(Vector3 moveDirection)
+        {
+            Vector3 lookDirection = Vector3.zero;
+            
+            switch (Moving ? rotateWhenMoving : rotateWhenStationary)
+            {
+                case RotationType.Align:
+                    lookDirection = moveDirection;
+                    break;
+                case RotationType.AlignClamped:
+                    lookDirection = Vector3.ProjectOnPlane(moveDirection, clampNormal).normalized;
+                    break;
+                case RotationType.LookAt:
+                    lookDirection = lookAtTransform
+                        ? lookAtTransform.position - transform.position
+                        : moveDirection;
+                    break;
+                case RotationType.LookAtClamped:
+                    lookDirection = lookAtTransform
+                        ? lookAtTransform.position - transform.position
+                        : moveDirection;
+                    lookDirection = Vector3.ProjectOnPlane(lookDirection, clampNormal).normalized;
+                    break;
+            }
+
+            if (lookDirection != Vector3.zero)
+            {                
+                Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationMultiplier);
             }
         }
 
