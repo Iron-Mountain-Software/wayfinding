@@ -1,5 +1,5 @@
 # Wayfinding
-*Version: 1.1.3*
+*Version: 1.1.4*
 ## Description: 
 AI pathfinding with referencable waypoints
 ## Package Mirrors: 
@@ -28,7 +28,7 @@ AI pathfinding with referencable waypoints
       * public float ***Speed***  { get; set; }
       * public float ***Multiplier***  { get; set; }
       * public Vector3 ***Offset***  { get; set; }
-      * public Boolean ***Rotate***  { get; set; }
+      * public RotationType ***Rotate***  { get; set; }
       * public float ***RotationMultiplier***  { get; set; }
       * public Boolean ***Moving***  { get; }
       * public Waypoint ***CurrentWaypoint***  { get; set; }
