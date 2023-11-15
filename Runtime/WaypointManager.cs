@@ -22,6 +22,13 @@ namespace IronMountain.Wayfinding
                 && test.Reference.ID == id);
         }
         
+        public static Waypoint GetWaypointByName(string name)
+        {
+            return !string.IsNullOrWhiteSpace(name)
+                ? Waypoints.Find(test => test && test.name == name)
+                : null;
+        }
+        
         public static Waypoint GetWaypoint(WaypointReference reference)
         {
             return reference 
